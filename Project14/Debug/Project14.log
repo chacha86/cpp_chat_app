@@ -1,0 +1,11 @@
+﻿  MyChatController.cpp
+C:\Users\taeji\source\repos\Project14\Project14\MyChatController.cpp(21,7): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
+C:\Users\taeji\source\repos\Project14\Project14\MyChatController.cpp(22,15): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  MyChatView.cpp
+  MySocket.cpp
+C:\Users\taeji\source\repos\Project14\Project14\MySocket.cpp(23,47): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+C:\Users\taeji\source\repos\Project14\Project14\MySocket.cpp(48,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\taeji\source\repos\Project14\Project14\MySocket.cpp(80,10): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  Source.cpp
+  Generating Code...
+  Project14.vcxproj -> C:\Users\taeji\source\repos\Project14\Debug\Project14.exe
