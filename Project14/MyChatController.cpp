@@ -10,6 +10,7 @@ ChatController::ChatController() {
 	memset(this->msgBuffer, 0, sizeof(msgBuffer));
 	this->msgBufferIndex = 0;
 	this->recvFlag = 0;
+	chatSocket = NULL;
 	chatView.paintChatDisplay(msgList);
 }
 
@@ -61,7 +62,7 @@ string ChatController::convertChatDataToString(string user, const char* msg) {
 	rsMsg = rsMsg.append(msg);
 	rsMsg = rsMsg.append("\n");
 
-	return msg;
+	return rsMsg;
 }
 
 ChatData ChatController::convertStringToChatData(string msg) {
@@ -86,23 +87,20 @@ int ChatController::joinServer(string ip, int port) {
 		chatSocket = new MySocket::Socket(ip.c_str(), port);
 		return 0;
 	}
-	else {
-		return -1;
-	}
+	return -1;
 }
 
 void ChatController::sendToServer(string user) {
 	// 메시지 보내기
-	memset(msgBuffer, 0, sizeof(msgBuffer)); // msgBuffer의 내용 비운다.
 	string sendMsg = convertChatDataToString(user, msgBuffer);
-
 	// 메시지를 보냈으므로 채팅창 다시 그리고
 	chatSocket->send_data(sendMsg.c_str());
 
-	chatView.paintChatDisplay(msgList);
 	// 메시지를 보냈으므로 메시지 버퍼 index초기화, 커서의 위치 초기화
 	msgBufferIndex = 0;
 	chatView.instantiateChatInputPos();
+	chatView.paintChatDisplay(msgList);
+	memset(msgBuffer, 0, sizeof(msgBuffer)); // msgBuffer의 내용 비운다.
 
 }
 

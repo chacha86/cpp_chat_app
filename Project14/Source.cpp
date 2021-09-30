@@ -106,6 +106,7 @@ int main() {
 	cin >> loginedUser;
 
 	cc = new ChatController();
+	cc->joinServer("127.0.0.1", 9999);
 	cv = new ChatView();
 	thread t1(test);
 	
