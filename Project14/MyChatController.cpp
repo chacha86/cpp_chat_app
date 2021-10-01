@@ -6,15 +6,30 @@
 using namespace MyChat;
 using namespace std;
 
-ChatController::ChatController() {
+ChatController::ChatController(string userId) {
 	memset(this->msgBuffer, 0, sizeof(msgBuffer));
+	this->chatUserId = userId;
 	this->msgBufferIndex = 0;
 	this->recvFlag = 0;
 	chatSocket = NULL;
 	chatView.paintChatDisplay(msgList);
 }
 
-void ChatController::run(string user) {
+void ChatController::runRecvBackground() {
+
+	while (true) {
+		char* str = new char[100];
+		strcpy(str, chatSocket->recv_data());
+		ChatData* chatData = new ChatData();
+		chatData->msg = str;
+		chatData->userId = chatUserId;
+
+		msgList.push_back(chatData);
+		recvFlag = 1;
+	}
+}
+
+void ChatController::run() {
 	while (true) {
 		if (recvFlag == 1) { // 서버에서 메시지가 왔을 때,
 			repaintWhenRecvFromServer();
@@ -23,7 +38,7 @@ void ChatController::run(string user) {
 			char key = getch(); // 키값을 가져오고
 
 			if (key == ENTER) { // 엔터라면
-				sendToServer(user);
+				sendToServer();
 			}
 			else if (key == BACKSPACE) {
 
@@ -37,9 +52,6 @@ void ChatController::run(string user) {
 }
 
 void ChatController::repaintWhenRecvFromServer() {
-	// 채팅 메시지 저장
-	msgList.push_back("서버에서 메시지가 옴..");
-
 	// 채팅창 다시 그리기
 	chatView.paintChatDisplay(msgList);
 
@@ -85,21 +97,23 @@ ChatData ChatController::convertStringToChatData(string msg) {
 int ChatController::joinServer(string ip, int port) {
 	if (chatSocket == NULL) {
 		chatSocket = new MySocket::Socket(ip.c_str(), port);
+		thread* t1 = new thread(&ChatController::runRecvBackground, this); 
+		t1->detach();
 		return 0;
 	}
 	return -1;
 }
 
-void ChatController::sendToServer(string user) {
+void ChatController::sendToServer() {
 	// 메시지 보내기
-	string sendMsg = convertChatDataToString(user, msgBuffer);
+	string sendMsg = convertChatDataToString(chatUserId, msgBuffer);
 	// 메시지를 보냈으므로 채팅창 다시 그리고
 	chatSocket->send_data(sendMsg.c_str());
 
 	// 메시지를 보냈으므로 메시지 버퍼 index초기화, 커서의 위치 초기화
 	msgBufferIndex = 0;
 	chatView.instantiateChatInputPos();
-	chatView.paintChatDisplay(msgList);
+	//chatView.paintChatDisplay(msgList);
 	memset(msgBuffer, 0, sizeof(msgBuffer)); // msgBuffer의 내용 비운다.
 
 }

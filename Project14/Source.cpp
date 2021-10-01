@@ -105,12 +105,12 @@ int main() {
 	cout << "사용할 이름을 입력해주세요 : ";
 	cin >> loginedUser;
 
-	cc = new ChatController();
+	cc = new ChatController(loginedUser);
 	cc->joinServer("127.0.0.1", 9999);
 	cv = new ChatView();
 	thread t1(test);
 	
-	cc->run(loginedUser);
+	cc->run();
 	t1.join();
 
 	//skt = new Socket(9999, "127.0.0.1");

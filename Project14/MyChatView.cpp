@@ -35,19 +35,19 @@ void ChatView::gotoxy(COORD pos) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-void ChatView::setChatDataList(vector<string> msgList) {
+void ChatView::setChatDataList(vector<ChatData*> msgList) {
 	int rowCount = 0;
-	for (string msg : msgList) {
+	for (ChatData* chatData : msgList) {
 		msgPrintPos.Y += rowCount;
 		gotoxy(msgPrintPos);
-		cout << msg;
+		cout << chatData->msg << endl;
 		rowCount++;
 		msgPrintPos.Y = MSG_PRINT_POS_Y;
 	}
 	gotoxy(chatInputPos);
 }
 
-void ChatView::paintChatDisplay(vector<string> msgList) {
+void ChatView::paintChatDisplay(vector<ChatData*> msgList) {
 	system("cls");
 	printChatWindow();
 	setChatDataList(msgList);
